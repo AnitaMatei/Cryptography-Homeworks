@@ -55,5 +55,10 @@ namespace ClassicCiphers.Ciphers
             return sb.ToString();
 
         }
+
+        public override string GetKeyValue()
+        {
+            return Key.StringValue;
+        }
     }
 }

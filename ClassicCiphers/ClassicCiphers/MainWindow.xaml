@@ -25,11 +25,11 @@
         <ListBox x:Name="usedCiphers" HorizontalAlignment="Left" Height="135" Margin="162,252,0,0" VerticalAlignment="Top" Width="100"/>
         <Label Content="Used ciphers" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="162,226,0,0" Width="100"/>
         <Label Content="Available ciphers" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,226,0,0" Width="100"/>
-        <TextBox x:Name="CaesarKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,252,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="OTPKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,280,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419"/>
-        <TextBox x:Name= "NihilistKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,308,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419"/>
-        <TextBox x:Name="BifidKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,336,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="TrifidKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,364,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="CaesarKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,252,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="OTPKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419"/>
+        <TextBox x:Name= "NihilistKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,308,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419"/>
+        <TextBox x:Name="BifidKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="TrifidKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
         <Label Content="Input:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,48,0,0"/>
         <Label Content="Output:" HorizontalAlignment="Left" Margin="501,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.474,0.538"/>
         <Label Content="Errors" Grid.Column="1" HorizontalAlignment="Left" Margin="19,48,0,0" VerticalAlignment="Top"/>

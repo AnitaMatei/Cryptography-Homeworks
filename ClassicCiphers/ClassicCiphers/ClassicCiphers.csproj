@@ -66,6 +66,8 @@
     <Compile Include="Ciphers\CipherKey.cs" />
     <Compile Include="Ciphers\GenericCipher.cs" />
     <Compile Include="Ciphers\ICipher.cs" />
+    <Compile Include="Ciphers\NihilistCipher.cs" />
+    <Compile Include="Ciphers\PolybiusSquare.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

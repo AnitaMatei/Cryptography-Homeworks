@@ -72,10 +72,9 @@ namespace ClassicCiphers
         private void SelectAvailableCipher(object sender, RoutedEventArgs e)
         {
             var myItem = sender as ListBoxItem;
-            myItem.IsSelected = false;
+            myItem.Selected -= new RoutedEventHandler(SelectAvailableCipher);
 
             availableCiphers.Items.Remove(myItem);
-            myItem.Selected -= new RoutedEventHandler(SelectAvailableCipher);
             myItem.Selected += new RoutedEventHandler(RemoveUsedCipher);
             usedCiphers.Items.Add(myItem);
 
@@ -90,16 +89,16 @@ namespace ClassicCiphers
             }
 
             UpdateCipherKeyTextBoxes();
+            myItem.IsSelected = false;
 
         }
 
         private void RemoveUsedCipher(object sender, RoutedEventArgs e)
         {
             var myItem = (ListBoxItem)sender;
-            myItem.IsSelected = false;
+            myItem.Selected -= new RoutedEventHandler(RemoveUsedCipher);
 
             usedCiphers.Items.Remove(myItem);
-            myItem.Selected -= new RoutedEventHandler(RemoveUsedCipher);
             myItem.Selected += new RoutedEventHandler(SelectAvailableCipher);
             availableCiphers.Items.Add(myItem);
 
@@ -115,6 +114,7 @@ namespace ClassicCiphers
             }
 
             UpdateCipherKeyTextBoxes();
+            myItem.IsSelected = false;
         }
         private bool LoadCiphers()
         {
@@ -125,16 +125,20 @@ namespace ClassicCiphers
 
                 for (int i = 0; i < usedCiphers.Items.Count; i++)
                 {
+                    if (textBoxes[i].Text.Equals(""))
+                        throw new FormatException("You must introduce a key for each ciphers!");
                     switch (textBoxes[i].Name)
                     {
                         case "CaesarKeyTextBox":
-                            if (CaesarKeyTextBox.Text.Equals(""))
-                                throw new FormatException("You must introduce a key for the caesar cipher!");
                             ciphers[i] = new CaesarCipher();
-                            ciphers[i].SetKey(CaesarKeyTextBox.Text);
-                            CaesarKeyTextBox.Text = ciphers[i].Key.StringValue;
+                            break;
+                        case "NihilistKeyTextBox":
+                            ciphers[i] = new NihilistCipher();
                             break;
                     }
+                    ciphers[i].SetKey(textBoxes[i].Text);
+                    textBoxes[i].Text = ciphers[i].GetKeyValue();
+
                 }
             }
             catch (FormatException ex)
@@ -150,18 +154,20 @@ namespace ClassicCiphers
         {
             if (!LoadCiphers())
                 return;
-
+            String encryptedText = inputTextBox.Text;
             for (int i = 0; i < usedCiphers.Items.Count; i++)
-                outputTextBox.Text = ciphers[i].Encrypt(inputTextBox.Text);
+                encryptedText = ciphers[i].Encrypt(encryptedText);
+            outputTextBox.Text = encryptedText;
         }
 
         private void DecryptText(object sender, RoutedEventArgs e)
         {
             if (!LoadCiphers())
                 return;
-
+            String decryptedText = inputTextBox.Text;
             for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
-                outputTextBox.Text = ciphers[i].Decrypt(inputTextBox.Text);
+                decryptedText = ciphers[i].Decrypt(decryptedText);
+            outputTextBox.Text = decryptedText;
         }
 
     }
