@@ -12,9 +12,8 @@ namespace ClassicCiphers.Ciphers
 
         protected override CipherKey CheckKeyValidity(String key)
         {
-            int tempKey;
             CipherKey cipherKey = new CipherKey();
-            if (key.Equals("") || !int.TryParse(key, out tempKey))
+            if (key.Equals("") || !int.TryParse(key, out int tempKey))
                 throw new FormatException("The key introduced for the caesar cipher is not an integer!");
             cipherKey.SetNumericalValue(tempKey % 26);
             return cipherKey;

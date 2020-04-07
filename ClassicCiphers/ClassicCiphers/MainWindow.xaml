@@ -11,10 +11,10 @@
             <ColumnDefinition Width="65*"/>
             <ColumnDefinition Width="23*"/>
         </Grid.ColumnDefinitions>
-        <TextBox x:Name="clearTextBox" HorizontalAlignment="Left" Height="130" Margin="26,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252" SelectionOpacity="0.1"/>
+        <TextBox x:Name="inputTextBox" HorizontalAlignment="Left" Height="130" Margin="26,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252" SelectionOpacity="0.1"/>
         <Button x:Name="encryptButton" Content="Encrypt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="349,79,0,0" Click="EncryptText"/>
-        <Button Content="Decrypt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="349,189,0,0"/>
-        <TextBox x:Name="encryptedTextBox" HorizontalAlignment="Left" Height="130" Margin="501,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252" SelectionOpacity="0.1"/>
+        <Button Content="Decrypt" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="349,189,0,0" Click="DecryptText"/>
+        <TextBox x:Name="outputTextBox" HorizontalAlignment="Left" Height="130" Margin="501,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252" SelectionOpacity="0.1"/>
         <ListBox x:Name="availableCiphers" HorizontalAlignment="Left" Height="135" Margin="26,252,0,0" VerticalAlignment="Top" Width="100">
             <ListBoxItem Content="Caesar" Selected="SelectAvailableCipher"/>
             <ListBoxItem Content="OTP" Selected="SelectAvailableCipher"/>
@@ -30,11 +30,12 @@
         <TextBox x:Name= "NihilistKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,308,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419"/>
         <TextBox x:Name="BifidKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,336,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
         <TextBox x:Name="TrifidKeyTextBox" HorizontalAlignment="Left" Height="23" Margin="334,364,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
-        <Label Content="Clear text:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,48,0,0"/>
-        <Label Content="Encrypted text:" HorizontalAlignment="Left" Margin="501,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.474,0.538"/>
+        <Label Content="Input:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,48,0,0"/>
+        <Label Content="Output:" HorizontalAlignment="Left" Margin="501,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.474,0.538"/>
         <Label Content="Errors" Grid.Column="1" HorizontalAlignment="Left" Margin="19,48,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="errorsTextBox" HorizontalAlignment="Left" Height="311" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Grid.Column="1" Margin="19,76,0,0"/>
         <Label Content="Keys" HorizontalAlignment="Left" Margin="334,226,0,0" VerticalAlignment="Top"/>
+        <Button Content="Swap text content" HorizontalAlignment="Left" Margin="310,135,0,0" VerticalAlignment="Top" Width="155" Click="SwapText"/>
 
     </Grid>
 </Window>
