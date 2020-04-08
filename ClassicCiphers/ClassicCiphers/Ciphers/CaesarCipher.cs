@@ -26,6 +26,10 @@ namespace ClassicCiphers.Ciphers
             {
                 return (char)('a' + x - 'z' - 1);
             }
+            else if (x < 'a')
+            {
+                return (char)('z' - 'a' + x + 1);
+            }
             else return x;
         }
 
@@ -39,7 +43,7 @@ namespace ClassicCiphers.Ciphers
             StringBuilder sb = new StringBuilder(text);
             for (int i = 0; i < text.Length; i++)
             {
-                if (sb[i] == ' ')
+                if (sb[i] > 'z' || sb[i] < 'a')
                     continue;
                 sb[i] = WrapAlphabetAscii((char)(text[i] + Key.NumericalValue));
             }
@@ -50,6 +54,8 @@ namespace ClassicCiphers.Ciphers
             StringBuilder sb = new StringBuilder(text);
             for (int i = 0; i < text.Length; i++)
             {
+                if (sb[i] > 'z' || sb[i] < 'a')
+                    continue;
                 sb[i] = WrapAlphabetAscii((char)(text[i] - Key.NumericalValue));
             }
             return sb.ToString();
