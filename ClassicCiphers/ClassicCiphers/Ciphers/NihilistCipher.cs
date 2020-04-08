@@ -8,6 +8,8 @@ namespace ClassicCiphers.Ciphers
 {
     class NihilistCipher : GenericCipher
     {
+        public static String DefaultKeyString = "zebras russian";
+
         PolybiusSquare MyPolybiusSquare;
 
         public NihilistCipher()

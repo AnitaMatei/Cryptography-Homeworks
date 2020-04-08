@@ -6,6 +6,7 @@ namespace ClassicCiphers.Ciphers
     public class CaesarCipher : GenericCipher
     {
 
+        public static String DefaultKeyString = "15";
         public CaesarCipher()
         {
         }
