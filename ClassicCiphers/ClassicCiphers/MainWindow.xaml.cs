@@ -32,10 +32,8 @@ namespace ClassicCiphers
 
             for (int i = 0; i < usedCiphersNames.Length; i++)
             {
-                textBoxes[i] = this.FindName(usedCiphersNames[i] + "KeyTextBox") as TextBox;
+                textBoxes[i] = this.FindName("textBox" + i.ToString()) as TextBox;
                 textBoxes[i].Visibility = Visibility.Hidden;
-                textBoxes[i].PreviewMouseDown += new MouseButtonEventHandler(EmptyTextBox);
-                textBoxes[i].Tag = "unpressed";
             }
         }
 
@@ -46,99 +44,30 @@ namespace ClassicCiphers
             outputTextBox.Text = tempString;
         }
 
-        private void EmptyTextBox(object sender, MouseButtonEventArgs e)
-        {
-            TextBox textBox = sender as TextBox;
-            if (textBox.Tag.Equals("unpressed"))
-            {
-                textBox.Text = "";
-                textBox.Tag = "pressed";
-            }
-        }
-
-        private void UpdateCipherKeyTextBoxes()
-        {
-            for (int i = 0; i < usedCiphers.Items.Count; i++)
-            {
-                if (textBoxes[i].Visibility == Visibility.Hidden)
-                    break;
-                ListBoxItem currentItem = usedCiphers.Items.GetItemAt(i) as ListBoxItem;
-
-                textBoxes[i].Text = currentItem.Content + " Key";
-                textBoxes[i].Name = currentItem.Content + "Key" + "TextBox";
-            }
-        }
-
-        private void SelectAvailableCipher(object sender, RoutedEventArgs e)
-        {
-            var myItem = sender as ListBoxItem;
-            myItem.Selected -= new RoutedEventHandler(SelectAvailableCipher);
-
-            availableCiphers.Items.Remove(myItem);
-            myItem.Selected += new RoutedEventHandler(RemoveUsedCipher);
-            usedCiphers.Items.Add(myItem);
-
-            for (int i = 0; i < usedCiphersNames.Length; i++)
-            {
-                if (!textBoxes[i].IsVisible)
-                {
-                    textBoxes[i].Visibility = Visibility.Visible;
-                    textBoxes[i].Text = myItem.Content + " Key";
-                    break;
-                }
-            }
-
-            UpdateCipherKeyTextBoxes();
-            myItem.IsSelected = false;
-
-        }
-
-        private void RemoveUsedCipher(object sender, RoutedEventArgs e)
-        {
-            var myItem = (ListBoxItem)sender;
-            myItem.Selected -= new RoutedEventHandler(RemoveUsedCipher);
-
-            usedCiphers.Items.Remove(myItem);
-            myItem.Selected += new RoutedEventHandler(SelectAvailableCipher);
-            availableCiphers.Items.Add(myItem);
-
-
-            for (int i = usedCiphersNames.Length - 1; i >= 0; i--)
-            {
-                if (textBoxes[i].IsVisible)
-                {
-                    textBoxes[i].Visibility = Visibility.Hidden;
-                    textBoxes[i].Tag = "unpressed";
-                    break;
-                }
-            }
-
-            UpdateCipherKeyTextBoxes();
-            myItem.IsSelected = false;
-        }
         private bool LoadCiphers()
         {
             try
             {
+                int i = 0;
                 if (inputTextBox.Text.Equals(""))
                     throw new FormatException("You have not introduced any text in the clear text box!");
 
-                for (int i = 0; i < usedCiphers.Items.Count; i++)
+                foreach (ListBoxItem currentItem in usedCiphers.Items)
                 {
                     if (textBoxes[i].Text.Equals(""))
                         throw new FormatException("You must introduce a key for each ciphers!");
-                    switch (textBoxes[i].Name)
+                    switch (currentItem.Content)
                     {
-                        case "CaesarKeyTextBox":
+                        case "Caesar":
                             ciphers[i] = new CaesarCipher();
                             break;
-                        case "NihilistKeyTextBox":
+                        case "Nihilist":
                             ciphers[i] = new NihilistCipher();
                             break;
                     }
                     ciphers[i].SetKey(textBoxes[i].Text);
                     textBoxes[i].Text = ciphers[i].GetKeyValue();
-
+                    i++;
                 }
             }
             catch (FormatException ex)
@@ -150,10 +79,22 @@ namespace ClassicCiphers
             return true;
         }
 
+        private void NormalizeInput()
+        {
+            inputTextBox.Text=inputTextBox.Text.ToLower();
+            foreach(TextBox currentTextBox in textBoxes)
+            {
+                if (!currentTextBox.IsVisible)
+                    return;
+                currentTextBox.Text = currentTextBox.Text.ToLower();
+            }
+        }
+
         private void EncryptText(object sender, RoutedEventArgs e)
         {
             if (!LoadCiphers())
                 return;
+            NormalizeInput();
             String encryptedText = inputTextBox.Text;
             for (int i = 0; i < usedCiphers.Items.Count; i++)
                 encryptedText = ciphers[i].Encrypt(encryptedText);
@@ -164,11 +105,67 @@ namespace ClassicCiphers
         {
             if (!LoadCiphers())
                 return;
+            NormalizeInput();
             String decryptedText = inputTextBox.Text;
             for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
                 decryptedText = ciphers[i].Decrypt(decryptedText);
             outputTextBox.Text = decryptedText;
         }
 
+        private void UpdateCipherKeyTextBoxes()
+        {
+            int i = 0;
+            foreach (TextBox currentTextBox in textBoxes)
+            {
+                currentTextBox.Visibility = Visibility.Hidden;
+            }
+            foreach (ListBoxItem currentItem in usedCiphers.Items)
+            {
+                textBoxes[i].Visibility = Visibility.Visible;
+                switch (currentItem.Content)
+                {
+                    case "Nihilist":
+                        textBoxes[i].Text = NihilistCipher.DefaultKeyString;
+                        break;
+                    case "Caesar":
+                        textBoxes[i].Text = CaesarCipher.DefaultKeyString;
+                        break;
+                }
+                textBoxes[i].Name = currentItem.Content + "Key" + "TextBox";
+                i++;
+            }
+        }
+        private void SelectAvailableCipher(object sender, RoutedEventArgs e)
+        {
+            foreach(ListBoxItem listBoxItem in availableCiphers.Items)
+            {
+                if(listBoxItem.IsSelected)
+                {
+                    availableCiphers.Items.Remove(listBoxItem);
+                    usedCiphers.Items.Add(listBoxItem);
+
+                    UpdateCipherKeyTextBoxes();
+
+                    break;
+                }
+            }
+        }
+        
+        private void RemoveUsedCipher(object sender, RoutedEventArgs e)
+        {
+            foreach (ListBoxItem listBoxItem in usedCiphers.Items)
+            {
+                if (listBoxItem.IsSelected)
+                {
+                    usedCiphers.Items.Remove(listBoxItem);
+                    availableCiphers.Items.Add(listBoxItem);
+
+                    UpdateCipherKeyTextBoxes();
+
+                    break;
+                }
+            }
+
+        }
     }
 }
