@@ -31,7 +31,7 @@ namespace ClassicCiphers.Ciphers
                 AdvancePosition(ref position);
             }
 
-            for (int i = 0; i < 25; i++)
+            for (int i = 0; i < 26; i++)
             {
                 element = (char)('a' + i);
                 if (Checkerboard.ContainsKey(element))
