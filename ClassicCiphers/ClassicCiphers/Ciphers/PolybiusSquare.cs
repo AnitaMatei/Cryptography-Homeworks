@@ -62,6 +62,15 @@ namespace ClassicCiphers.Ciphers
             return Checkerboard[element];
         }
 
+        public int GetLineValueOf(char element)
+        {
+            return GetValueOf(element) / 10;
+        }
+        public int GetColumnValueOf(char element)
+        {
+            return GetValueOf(element) % 10;
+        }
+
         public char GetElementOfValue(int value)
         {
             return Checkerboard.FirstOrDefault(x => x.Value == value).Key;

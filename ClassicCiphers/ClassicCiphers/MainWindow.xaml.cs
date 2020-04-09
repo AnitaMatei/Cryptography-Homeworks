@@ -64,6 +64,9 @@ namespace ClassicCiphers
                         case "Nihilist":
                             ciphers[i] = new NihilistCipher();
                             break;
+                        case "Bifid":
+                            ciphers[i] = new BifidCipher();
+                            break;
                     }
                     ciphers[i].SetKey(textBoxes[i].Text);
                     textBoxes[i].Text = ciphers[i].GetKeyValue();
@@ -129,6 +132,9 @@ namespace ClassicCiphers
                         break;
                     case "Caesar":
                         textBoxes[i].Text = CaesarCipher.DefaultKeyString;
+                        break;
+                    case "Bifid":
+                        textBoxes[i].Text = BifidCipher.DefaultKeyString;
                         break;
                 }
                 textBoxes[i].Name = currentItem.Content + "Key" + "TextBox";

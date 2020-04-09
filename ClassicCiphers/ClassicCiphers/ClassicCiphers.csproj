@@ -62,6 +62,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Ciphers\BifidCipher.cs" />
     <Compile Include="Ciphers\CaesarCipher.cs" />
     <Compile Include="Ciphers\CipherKey.cs" />
     <Compile Include="Ciphers\GenericCipher.cs" />
