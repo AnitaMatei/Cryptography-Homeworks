@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ClassicCiphers"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="1062">
-    <Grid x:Name="decryptButton">
+        Title="MainWindow" Height="450" Width="1125.297">
+    <Grid x:Name="decryptButton" Margin="0,0,-79,0">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="65*"/>
             <ColumnDefinition Width="23*"/>
@@ -32,12 +32,18 @@
         <TextBox x:Name="textBox4" HorizontalAlignment="Left" Height="23" Margin="334,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
         <Label Content="Input:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,48,0,0"/>
         <Label Content="Output:" HorizontalAlignment="Left" Margin="501,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.474,0.538"/>
-        <Label Content="Errors" Grid.Column="1" HorizontalAlignment="Left" Margin="19,48,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="errorsTextBox" HorizontalAlignment="Left" Height="311" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Grid.Column="1" Margin="19,76,0,0"/>
+        <Label Content="Errors" HorizontalAlignment="Left" Margin="856,45,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="errorsTextBox" HorizontalAlignment="Left" Height="311" TextWrapping="Wrap" VerticalAlignment="Top" Width="234" Margin="856,79,0,0" Grid.ColumnSpan="2"/>
         <Label Content="Keys" HorizontalAlignment="Left" Margin="334,226,0,0" VerticalAlignment="Top"/>
         <Button Content="Swap text content" HorizontalAlignment="Left" Margin="310,135,0,0" VerticalAlignment="Top" Width="155" Click="SwapText"/>
         <Button Content="-&gt;" HorizontalAlignment="Left" Margin="143,265,0,0" VerticalAlignment="Top" Width="40" RenderTransformOrigin="0.5,0.5" Click="SelectAvailableCipher"/>
         <Button Content="&lt;-" HorizontalAlignment="Left" VerticalAlignment="Top" Width="40" Margin="143,349,0,0" Click="RemoveUsedCipher"/>
+        <Button x:Name ="inputTextBoxButton" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="203,48,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
+        <Button x:Name ="textBox0Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,255,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
+        <Button x:Name ="textBox1Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,283,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
+        <Button x:Name ="textBox2Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,312,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
+        <Button x:Name ="textBox3Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,340,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
+        <Button x:Name ="textBox4Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,367,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
 
     </Grid>
 </Window>

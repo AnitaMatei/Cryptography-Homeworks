@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ClassicCiphers.Ciphers;
+using System.IO;
 
 namespace ClassicCiphers
 {
@@ -22,18 +23,21 @@ namespace ClassicCiphers
     /// 
     public partial class MainWindow : Window
     {
-        TextBox[] textBoxes = new TextBox[5];
-        GenericCipher[] ciphers = new GenericCipher[5];
-        String[] usedCiphersNames = { "Caesar", "OTP", "Nihilist", "Bifid", "Trifid" };
+        static int AvailableCipherCount = 5;
+        TextBox[] textBoxes = new TextBox[AvailableCipherCount];
+        Button[] buttons = new Button[AvailableCipherCount];
+        GenericCipher[] ciphers = new GenericCipher[AvailableCipherCount];
 
         public MainWindow()
         {
             InitializeComponent();
 
-            for (int i = 0; i < usedCiphersNames.Length; i++)
+            for (int i = 0; i < AvailableCipherCount; i++)
             {
                 textBoxes[i] = this.FindName("textBox" + i.ToString()) as TextBox;
+                buttons[i] = this.FindName(textBoxes[i].Name + "Button") as Button;
                 textBoxes[i].Visibility = Visibility.Hidden;
+                buttons[i].Visibility = Visibility.Hidden;
             }
         }
 
@@ -84,8 +88,8 @@ namespace ClassicCiphers
 
         private void NormalizeInput()
         {
-            inputTextBox.Text=inputTextBox.Text.ToLower();
-            foreach(TextBox currentTextBox in textBoxes)
+            inputTextBox.Text = inputTextBox.Text.ToLower();
+            foreach (TextBox currentTextBox in textBoxes)
             {
                 if (!currentTextBox.IsVisible)
                     return;
@@ -121,10 +125,14 @@ namespace ClassicCiphers
             foreach (TextBox currentTextBox in textBoxes)
             {
                 currentTextBox.Visibility = Visibility.Hidden;
+                buttons[i].Visibility = Visibility.Hidden;
+                i++;
             }
+            i = 0;
             foreach (ListBoxItem currentItem in usedCiphers.Items)
             {
                 textBoxes[i].Visibility = Visibility.Visible;
+                buttons[i].Visibility = Visibility.Visible;
                 switch (currentItem.Content)
                 {
                     case "Nihilist":
@@ -143,9 +151,9 @@ namespace ClassicCiphers
         }
         private void SelectAvailableCipher(object sender, RoutedEventArgs e)
         {
-            foreach(ListBoxItem listBoxItem in availableCiphers.Items)
+            foreach (ListBoxItem listBoxItem in availableCiphers.Items)
             {
-                if(listBoxItem.IsSelected)
+                if (listBoxItem.IsSelected)
                 {
                     availableCiphers.Items.Remove(listBoxItem);
                     usedCiphers.Items.Add(listBoxItem);
@@ -156,7 +164,7 @@ namespace ClassicCiphers
                 }
             }
         }
-        
+
         private void RemoveUsedCipher(object sender, RoutedEventArgs e)
         {
             foreach (ListBoxItem listBoxItem in usedCiphers.Items)
@@ -172,6 +180,19 @@ namespace ClassicCiphers
                 }
             }
 
+        }
+
+        private void LoadFileContents(object sender, RoutedEventArgs e)
+        {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+
+            Nullable<bool> result = openFileDialog.ShowDialog();
+            if (result == true)
+            {
+                String buttonName = (sender as Button).Name;
+                String buttonNamePrefix = buttonName.Substring(0,buttonName.Length - 6);
+                (this.FindName(buttonNamePrefix) as TextBox).Text = File.ReadAllText(openFileDialog.FileName);
+            }
         }
     }
 }
