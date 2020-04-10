@@ -17,10 +17,9 @@
         <TextBox x:Name="outputTextBox" HorizontalAlignment="Left" Height="130" Margin="501,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="252" SelectionOpacity="0.1"/>
         <ListBox x:Name="availableCiphers" HorizontalAlignment="Left" Height="135" Margin="26,252,0,0" VerticalAlignment="Top" Width="100">
             <ListBoxItem Content="Caesar"/>
-            <ListBoxItem Content="OTP"/>
             <ListBoxItem Content="Nihilist"/>
             <ListBoxItem Content="Bifid"/>
-            <ListBoxItem Content="Trifid"/>
+            <ListBoxItem Content="Playfair"/>
         </ListBox>
         <ListBox x:Name="usedCiphers" HorizontalAlignment="Left" Height="135" Margin="206,252,0,0" VerticalAlignment="Top" Width="100"/>
         <Label Content="Used ciphers" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="206,227,0,0" Width="100"/>
@@ -29,7 +28,6 @@
         <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="23" Margin="334,280,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419"/>
         <TextBox x:Name= "textBox2" HorizontalAlignment="Left" Height="23" Margin="334,308,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419"/>
         <TextBox x:Name="textBox3" HorizontalAlignment="Left" Height="23" Margin="334,336,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
-        <TextBox x:Name="textBox4" HorizontalAlignment="Left" Height="23" Margin="334,364,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="419" Grid.ColumnSpan="2"/>
         <Label Content="Input:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,48,0,0"/>
         <Label Content="Output:" HorizontalAlignment="Left" Margin="501,48,0,0" VerticalAlignment="Top" RenderTransformOrigin="1.474,0.538"/>
         <Label Content="Errors" HorizontalAlignment="Left" Margin="856,45,0,0" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
@@ -43,7 +41,6 @@
         <Button x:Name ="textBox1Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,283,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
         <Button x:Name ="textBox2Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,312,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
         <Button x:Name ="textBox3Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,340,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
-        <Button x:Name ="textBox4Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,367,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
-
+        
     </Grid>
 </Window>

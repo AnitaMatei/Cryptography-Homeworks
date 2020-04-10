@@ -23,7 +23,7 @@ namespace ClassicCiphers
     /// 
     public partial class MainWindow : Window
     {
-        static int AvailableCipherCount = 5;
+        static int AvailableCipherCount = 4;
         TextBox[] textBoxes = new TextBox[AvailableCipherCount];
         Button[] buttons = new Button[AvailableCipherCount];
         GenericCipher[] ciphers = new GenericCipher[AvailableCipherCount];
@@ -70,6 +70,9 @@ namespace ClassicCiphers
                             break;
                         case "Bifid":
                             ciphers[i] = new BifidCipher();
+                            break;
+                        case "Playfair":
+                            ciphers[i] = new Playfair();
                             break;
                     }
                     ciphers[i].SetKey(textBoxes[i].Text);
@@ -143,6 +146,9 @@ namespace ClassicCiphers
                         break;
                     case "Bifid":
                         textBoxes[i].Text = BifidCipher.DefaultKeyString;
+                        break;
+                    case "Playfair":
+                        textBoxes[i].Text = Playfair.DefaultKeyString;
                         break;
                 }
                 textBoxes[i].Name = currentItem.Content + "Key" + "TextBox";
