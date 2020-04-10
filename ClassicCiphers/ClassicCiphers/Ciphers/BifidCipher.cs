@@ -46,7 +46,7 @@ namespace ClassicCiphers.Ciphers
             LinkedList<int> spaces = new LinkedList<int>();
             for (int i = 0; i < text.Length; i++)
             {
-                if (text[i] < 'a' || text[i] > 'z')
+                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
                 {
                     if (text[i] == ' ')
                         spaces.AddLast(i);

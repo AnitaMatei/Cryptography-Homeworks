@@ -57,7 +57,7 @@ namespace ClassicCiphers.Ciphers
             int progress = 0;
             for (int i = 0; i < text.Length; i++)
             {
-                if (text[i] == ' ' || text[i]<'a' || text[i]>'z')
+                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
                 {
                     continue;
                 }
@@ -87,6 +87,8 @@ namespace ClassicCiphers.Ciphers
             return sb.ToString();
 
         }
+
+        
         public override string GetKeyValue()
         {
             return MyPolybiusSquare.Key + " " + Key.StringValue;

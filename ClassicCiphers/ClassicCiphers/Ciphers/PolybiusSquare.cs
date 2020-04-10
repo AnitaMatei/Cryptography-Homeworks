@@ -9,6 +9,7 @@ namespace ClassicCiphers.Ciphers
     class PolybiusSquare
     {
         Dictionary<char, int> Checkerboard;
+        static char[] SpecialCharacters = new char[5] { ' ', '.', ',', '?', '!' };
         public String Key { get; set; }
 
         public PolybiusSquare()
@@ -30,7 +31,12 @@ namespace ClassicCiphers.Ciphers
                 AddToCheckerboard(element, position);
                 AdvancePosition(ref position);
             }
-
+            for (int i = 0; i < SpecialCharacters.Length; i++)
+            {
+                element = SpecialCharacters[i];
+                AddToCheckerboard(element, position);
+                AdvancePosition(ref position);
+            }
             for (int i = 0; i < 26; i++)
             {
                 element = (char)('a' + i);
@@ -53,10 +59,23 @@ namespace ClassicCiphers.Ciphers
         }
         private void AdvancePosition(ref int position)
         {
-            if (position % 10 != 0 && position % 5 == 0)
-                position += 6;
+            if (position % 10 != 0 && (position % 10) % 6 == 0)
+                position += 5;
             else position++;
         }
+
+        public bool ContainsCharacter(char character)
+        {
+            foreach(char tempChar in SpecialCharacters)
+            {
+                if (character == tempChar)
+                    return true;
+            }
+            if (character >= 'a' && character <= 'z')
+                return true;
+            return false;
+        }
+
         public int GetValueOf(char element)
         {
             return Checkerboard[element];

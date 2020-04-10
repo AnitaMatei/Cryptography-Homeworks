@@ -6,7 +6,7 @@ namespace ClassicCiphers.Ciphers
     public class CaesarCipher : GenericCipher
     {
 
-        public static String DefaultKeyString = "15";
+        public static String DefaultKeyString = "21";
         public CaesarCipher()
         {
         }
@@ -63,6 +63,15 @@ namespace ClassicCiphers.Ciphers
 
         }
 
+        //private bool ReplaceSpaceCharacter(ref StringBuilder sb, char character)
+        //{
+        //    if (character == ' ')
+        //    {
+        //        sb.Append(SpaceReplacement);
+        //        return true;
+        //    }
+        //    return false;
+        //}
         public override string GetKeyValue()
         {
             return Key.StringValue;
