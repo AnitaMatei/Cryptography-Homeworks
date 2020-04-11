@@ -62,19 +62,13 @@ namespace ClassicCiphers.Ciphers
             return sb.ToString();
 
         }
-
-        //private bool ReplaceSpaceCharacter(ref StringBuilder sb, char character)
-        //{
-        //    if (character == ' ')
-        //    {
-        //        sb.Append(SpaceReplacement);
-        //        return true;
-        //    }
-        //    return false;
-        //}
         public override string GetKeyValue()
         {
             return Key.StringValue;
+        }
+        public override string ToString()
+        {
+            return "Caesar";
         }
     }
 }

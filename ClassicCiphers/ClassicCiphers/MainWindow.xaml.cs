@@ -72,7 +72,7 @@ namespace ClassicCiphers
                             ciphers[i] = new BifidCipher();
                             break;
                         case "Playfair":
-                            ciphers[i] = new Playfair();
+                            ciphers[i] = new PlayfairCipher();
                             break;
                     }
                     ciphers[i].SetKey(textBoxes[i].Text);
@@ -81,6 +81,27 @@ namespace ClassicCiphers
                 }
             }
             catch (FormatException ex)
+            {
+                errorsTextBox.Text = ex.Message;
+                return false;
+            }
+            errorsTextBox.Text = "";
+            return true;
+        }
+
+        private bool VerifyCipherStackValidity()
+        {
+            if (usedCiphers.Items.Count <= 1)
+                return true;
+            try
+            {
+                for (int i = 0; i < usedCiphers.Items.Count; i++)
+                {
+                    if (i > 0 && ciphers[i] is PlayfairCipher)
+                        throw new Exception("Playfair can only be used as the top cipher on the stack!");
+                }
+            }
+            catch (Exception ex)
             {
                 errorsTextBox.Text = ex.Message;
                 return false;
@@ -102,23 +123,41 @@ namespace ClassicCiphers
 
         private void EncryptText(object sender, RoutedEventArgs e)
         {
-            if (!LoadCiphers())
+            if (!LoadCiphers() || !VerifyCipherStackValidity())
                 return;
             NormalizeInput();
             String encryptedText = inputTextBox.Text;
-            for (int i = 0; i < usedCiphers.Items.Count; i++)
-                encryptedText = ciphers[i].Encrypt(encryptedText);
+            try
+            {
+                for (int i = 0; i < usedCiphers.Items.Count; i++)
+                    encryptedText = ciphers[i].Encrypt(encryptedText);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                errorsTextBox.Text = ex.Message;
+                return;
+            }
             outputTextBox.Text = encryptedText;
         }
 
         private void DecryptText(object sender, RoutedEventArgs e)
         {
-            if (!LoadCiphers())
+            if (!LoadCiphers() || !VerifyCipherStackValidity())
                 return;
             NormalizeInput();
             String decryptedText = inputTextBox.Text;
-            for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
-                decryptedText = ciphers[i].Decrypt(decryptedText);
+            try
+            {
+                for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
+                    decryptedText = ciphers[i].Decrypt(decryptedText);
+            }
+            catch (IndexOutOfRangeException ex)
+            {
+                errorsTextBox.Text = ex.Message;
+                return;
+            }
+
+
             outputTextBox.Text = decryptedText;
         }
 
@@ -148,7 +187,7 @@ namespace ClassicCiphers
                         textBoxes[i].Text = BifidCipher.DefaultKeyString;
                         break;
                     case "Playfair":
-                        textBoxes[i].Text = Playfair.DefaultKeyString;
+                        textBoxes[i].Text = PlayfairCipher.DefaultKeyString;
                         break;
                 }
                 textBoxes[i].Name = currentItem.Content + "Key" + "TextBox";
@@ -196,7 +235,7 @@ namespace ClassicCiphers
             if (result == true)
             {
                 String buttonName = (sender as Button).Name;
-                String buttonNamePrefix = buttonName.Substring(0,buttonName.Length - 6);
+                String buttonNamePrefix = buttonName.Substring(0, buttonName.Length - 6);
                 (this.FindName(buttonNamePrefix) as TextBox).Text = File.ReadAllText(openFileDialog.FileName);
             }
         }

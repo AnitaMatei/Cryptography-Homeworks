@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace ClassicCiphers.Ciphers
 {
-    class Playfair : GenericCipher
+    class PlayfairCipher : GenericCipher
     {
         public static String DefaultKeyString = "bhu";
 
         PolybiusSquare MyPolybiusSquare;
 
-        public Playfair()
+        public PlayfairCipher()
         {
             MyPolybiusSquare = new PolybiusSquare();
         }
@@ -22,8 +22,8 @@ namespace ClassicCiphers.Ciphers
             CipherKey cipherKey = new CipherKey();
             for (int i = 0; i < key.Length; i++)
             {
-                if (key[i] < 'a' || key[i] > 'z')
-                    throw new FormatException("The key introduced for the playfair cipher contains more than alphabet letters!");
+                if (!MyPolybiusSquare.ContainsCharacter(key[i]))
+                    throw new FormatException("The key introduced for the playfair cipher contains more than the permitted characters!");
             }
 
             cipherKey.SetStringValue(key);
@@ -42,15 +42,13 @@ namespace ClassicCiphers.Ciphers
         {
             StringBuilder sb = new StringBuilder(),
                 sbToReturn = new StringBuilder();
+            if (text.Length % 2 == 1)
+                throw new IndexOutOfRangeException("The input text provided for encryption with playfair has an uneven number of characters!");
             for (int i = 0; i < text.Length; i++)
             {
                 if (!MyPolybiusSquare.ContainsCharacter(text[i]))
                     continue;
                 sb.Append(text[i]);
-            }
-            if (sb.Length % 2 == 1)
-            {
-                sb.Append('x');
             }
             for (int i = 0; i < sb.Length; i += 2)
             {
@@ -62,56 +60,54 @@ namespace ClassicCiphers.Ciphers
         public override String Decrypt(String text)
         {
             StringBuilder sb = new StringBuilder(),
-                polybiusValues = new StringBuilder();
-            LinkedList<int> spaces = new LinkedList<int>();
+                sbToReturn = new StringBuilder();
+            if (text.Length % 2 == 1)
+                throw new IndexOutOfRangeException("The input text provided for decryption with playfair has an uneven number of characters!");
             for (int i = 0; i < text.Length; i++)
             {
-                if (text[i] < 'a' || text[i] > 'z')
-                {
-                    if (text[i] == ' ')
-                        spaces.AddLast(i);
+                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
                     continue;
-                }
-                polybiusValues.Append(MyPolybiusSquare.GetValueOf(text[i]));
+                sb.Append(text[i]);
             }
 
-            int j = 0;
-            for (int i = 0; i < polybiusValues.Length / 2; i++)
+            for (int i = 0; i < sb.Length; i += 2)
             {
-                //the spaces positions are offset by the amount of previous spaces found, 
-                //so we deduct the number of found spaces from the current space's position
-                if (j < spaces.Count && i == spaces.ElementAt(j) - j)
-                {
-                    sb.Append(" ");
-                    j++;
-                }
-                int.TryParse(polybiusValues[i].ToString() + polybiusValues[polybiusValues.Length / 2 + i].ToString(), out int value);
-                sb.Append(MyPolybiusSquare.GetElementOfValue(value));
+                char x = sb[i];
+                char y = sb[i + 1];
+                sbToReturn.Append(DecryptCharacterPair(x,y));
             }
 
-            return sb.ToString();
-
+            return sbToReturn.ToString();
         }
 
         private StringBuilder EncryptCharacterPair(char x, char y)
         {
+            return TransformCharacterPair(x, y, 1);
+        }
+        private StringBuilder DecryptCharacterPair(char x, char y)
+        {
+            return TransformCharacterPair(x, y, -1);
+        }
+
+        private StringBuilder TransformCharacterPair(char x, char y, int direction)
+        {
+
             StringBuilder sb = new StringBuilder();
             int xColumnValue = MyPolybiusSquare.GetColumnValueOf(x),
                 xLineValue = MyPolybiusSquare.GetLineValueOf(x),
                 yColumnValue = MyPolybiusSquare.GetColumnValueOf(y),
                 yLineValue = MyPolybiusSquare.GetLineValueOf(y);
-
             if (xColumnValue == yColumnValue)
             {
-                int xEncryptedVal = WrapLineValue(xLineValue + 1) * 10 + xColumnValue;
-                int yEncryptedVal = WrapLineValue(yLineValue + 1) * 10 + yColumnValue;
+                int xEncryptedVal = WrapLineValue(xLineValue + direction, direction) * 10 + xColumnValue;
+                int yEncryptedVal = WrapLineValue(yLineValue + direction, direction) * 10 + yColumnValue;
                 sb.Append(MyPolybiusSquare.GetElementOfValue(xEncryptedVal));
                 sb.Append(MyPolybiusSquare.GetElementOfValue(yEncryptedVal));
             }
             else if (xLineValue == yLineValue)
             {
-                int xEncryptedVal = xLineValue * 10 + WrapColumnValue(xColumnValue + 1);
-                int yEncryptedVal = yLineValue * 10 + WrapColumnValue(yColumnValue + 1);
+                int xEncryptedVal = xLineValue * 10 + WrapColumnValue(xColumnValue + direction, direction);
+                int yEncryptedVal = yLineValue * 10 + WrapColumnValue(yColumnValue + direction, direction);
                 sb.Append(MyPolybiusSquare.GetElementOfValue(xEncryptedVal));
                 sb.Append(MyPolybiusSquare.GetElementOfValue(yEncryptedVal));
             }
@@ -127,18 +123,22 @@ namespace ClassicCiphers.Ciphers
             return sb;
         }
 
-        private int WrapLineValue(int x)
+        private int WrapLineValue(int x, int direction)
         {
-            if (x > 5)
+            if (x > PolybiusSquare.LineCount)
                 return 1;
-            else return x + 1;
+            else if (x < 1)
+                return PolybiusSquare.LineCount;
+            else return x;
         }
 
-        private int WrapColumnValue(int x)
+        private int WrapColumnValue(int x, int direction)
         {
-            if (x > 6)
+            if (x > PolybiusSquare.ColumnCount)
                 return 1;
-            else return x + 1;
+            else if (x < 1)
+                return PolybiusSquare.ColumnCount;
+            else return x;
         }
 
         public override string GetKeyValue()
@@ -146,6 +146,10 @@ namespace ClassicCiphers.Ciphers
             return Key.StringValue;
         }
 
+        public override string ToString()
+        {
+            return "Playfair";
+        }
 
     }
 }

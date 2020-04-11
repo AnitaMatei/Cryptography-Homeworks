@@ -29,8 +29,8 @@ namespace ClassicCiphers.Ciphers
 
             for (int i = 0; i < polybiusSquareKey.Length; i++)
             {
-                if (polybiusSquareKey[i] < 'a' || polybiusSquareKey[i] > 'z')
-                    throw new FormatException("The key introduced for the nihilist cipher for the polybius square contains more than alphabet letters!");
+                if (!MyPolybiusSquare.ContainsCharacter(polybiusSquareKey[i]))
+                    throw new FormatException("The key introduced for the nihilist cipher for the polybius square contains more than the permitted characters!");
             }
 
             for (int i = 0; i < encryptionKey.Length; i++)
@@ -92,6 +92,10 @@ namespace ClassicCiphers.Ciphers
         public override string GetKeyValue()
         {
             return MyPolybiusSquare.Key + " " + Key.StringValue;
+        }
+        public override string ToString()
+        {
+            return "Nihilist";
         }
     }
 }
