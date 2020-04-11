@@ -9,7 +9,11 @@ namespace ClassicCiphers.Ciphers
     class PolybiusSquare
     {
         Dictionary<char, int> Checkerboard;
-        static char[] SpecialCharacters = new char[5] { ' ', '.', ',', '?', '!' };
+        static char[] SpecialCharacters = new char[28] { ' ', '!', '"', '#', '$','%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<',
+            '=','>','?','@','[','\\',']','^','_' };
+        static char[] NumberCharacters = new char[10] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+        public static int ColumnCount = 8;
+        public static int LineCount = 8;
         public String Key { get; set; }
 
         public PolybiusSquare()
@@ -25,48 +29,48 @@ namespace ClassicCiphers.Ciphers
             for (int i = 0; i < key.Length; i++)
             {
                 element = key[i];
-                if (Checkerboard.ContainsKey(element))
-                    continue;
-
-                AddToCheckerboard(element, position);
-                AdvancePosition(ref position);
-            }
-            for (int i = 0; i < SpecialCharacters.Length; i++)
-            {
-                element = SpecialCharacters[i];
-                AddToCheckerboard(element, position);
-                AdvancePosition(ref position);
+                AddToCheckerboard(element, ref position);
             }
             for (int i = 0; i < 26; i++)
             {
                 element = (char)('a' + i);
-                if (Checkerboard.ContainsKey(element))
-                    continue;
-
-                AddToCheckerboard(element, position);
-                AdvancePosition(ref position);
+                AddToCheckerboard(element, ref position);
+            }
+            for (int i = 0; i < NumberCharacters.Length; i++)
+            {
+                element = NumberCharacters[i];
+                AddToCheckerboard(element, ref position);
+            }
+            for (int i = 0; i < SpecialCharacters.Length; i++)
+            {
+                element = SpecialCharacters[i];
+                AddToCheckerboard(element, ref position);
             }
         }
 
-        private void AddToCheckerboard(char element, int position)
+        private void AddToCheckerboard(char element, ref int position)
         {
+            if (Checkerboard.ContainsKey(element))
+                return;
             Checkerboard.Add(element, position);
-            if (element == 'i')
-                Checkerboard.Add('j', position);
-            else if (element == 'j')
-                Checkerboard.Add('i', position);
+            AdvancePosition(ref position);
 
         }
         private void AdvancePosition(ref int position)
         {
-            if (position % 10 != 0 && (position % 10) % 6 == 0)
-                position += 5;
+            if (position % 10 != 0 && (position % 10) % ColumnCount == 0)
+                position += 11 - ColumnCount;
             else position++;
         }
 
         public bool ContainsCharacter(char character)
         {
-            foreach(char tempChar in SpecialCharacters)
+            foreach (char tempChar in SpecialCharacters)
+            {
+                if (character == tempChar)
+                    return true;
+            }
+            foreach (char tempChar in NumberCharacters)
             {
                 if (character == tempChar)
                     return true;
