@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using ClassicCiphers.Exceptions;
 
 namespace ClassicCiphers.Ciphers
 {
@@ -16,14 +14,16 @@ namespace ClassicCiphers.Ciphers
         {
             MyPolybiusSquare = new PolybiusSquare();
         }
-
+        /*
+         * Checks if the key string contains characters contained by the polybius square.
+         */ 
         protected override CipherKey CheckKeyValidity(String key)
         {
             CipherKey cipherKey = new CipherKey();
             for (int i = 0; i < key.Length; i++)
             {
                 if (!MyPolybiusSquare.ContainsCharacter(key[i]))
-                    throw new FormatException("The key introduced for the bifid cipher contains more than the permitted characters!");
+                    throw new InvalidKeyFormatException("The key introduced for the bifid cipher contains more than the permitted characters!");
             }
 
             cipherKey.SetStringValue(key);
@@ -45,9 +45,6 @@ namespace ClassicCiphers.Ciphers
                 secondHalf = new StringBuilder();
             for (int i = 0; i < text.Length; i++)
             {
-                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
-                    continue;
-
                 firstHalf.Append(MyPolybiusSquare.GetLineValueOf(text[i]));
                 secondHalf.Append(MyPolybiusSquare.GetColumnValueOf(text[i]));
             }
@@ -67,9 +64,6 @@ namespace ClassicCiphers.Ciphers
                 polybiusValues = new StringBuilder();
             for (int i = 0; i < text.Length; i++)
             {
-                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
-                    continue;
-
                 polybiusValues.Append(MyPolybiusSquare.GetValueOf(text[i]));
             }
             
@@ -80,7 +74,18 @@ namespace ClassicCiphers.Ciphers
             }
 
             return sb.ToString();
-
+        }
+        /*
+         * If the text contains a character not contained by the polybius square, the text is invalid.
+         */ 
+        public override bool CheckInputTextValidity(String text, String mode)
+        {
+            for(int i = 0; i < text.Length; i++)
+            {
+                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
+                    return false;
+            }
+            return true;
         }
         public override string GetKeyValue()
         {

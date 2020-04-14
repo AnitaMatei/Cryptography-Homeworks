@@ -1,19 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ClassicCiphers.Ciphers;
 using System.IO;
+using ClassicCiphers.Exceptions;
 
 namespace ClassicCiphers
 {
@@ -27,7 +17,6 @@ namespace ClassicCiphers
         TextBox[] textBoxes = new TextBox[AvailableCipherCount];
         Button[] buttons = new Button[AvailableCipherCount];
         GenericCipher[] ciphers = new GenericCipher[AvailableCipherCount];
-
         public MainWindow()
         {
             InitializeComponent();
@@ -48,18 +37,21 @@ namespace ClassicCiphers
             outputTextBox.Text = tempString;
         }
 
+        /*
+         * Instantiates different ciphers based on the stack of used ciphers.
+         */
         private bool LoadCiphers()
         {
+            int i = 0;
             try
             {
-                int i = 0;
-                if (inputTextBox.Text.Equals(""))
-                    throw new FormatException("You have not introduced any text in the clear text box!");
-
                 foreach (ListBoxItem currentItem in usedCiphers.Items)
                 {
                     if (textBoxes[i].Text.Equals(""))
-                        throw new FormatException("You must introduce a key for each ciphers!");
+                    {
+                        errorsTextBox.Text = "You must introduce a key for each cipher!";
+                        return false;
+                    }
                     switch (currentItem.Content)
                     {
                         case "Caesar":
@@ -80,36 +72,63 @@ namespace ClassicCiphers
                     i++;
                 }
             }
-            catch (FormatException ex)
+            catch (InvalidKeyFormatException ex)
             {
                 errorsTextBox.Text = ex.Message;
                 return false;
             }
-            errorsTextBox.Text = "";
+
             return true;
         }
 
+        /*
+         * Verifies the validity of the used cipher stack. 
+         * If playfair is anywhere other than the top, the stack is invalid.
+         */
         private bool VerifyCipherStackValidity()
         {
             if (usedCiphers.Items.Count <= 1)
                 return true;
-            try
-            {
-                for (int i = 0; i < usedCiphers.Items.Count; i++)
+            for (int i = 0; i < usedCiphers.Items.Count; i++)
+                if (i > 0 && ciphers[i] is PlayfairCipher)
                 {
-                    if (i > 0 && ciphers[i] is PlayfairCipher)
-                        throw new Exception("Playfair can only be used as the top cipher on the stack!");
+                    errorsTextBox.Text = "Playfair can only be used as the top cipher on the stack!";
+                    return false;
                 }
-            }
-            catch (Exception ex)
-            {
-                errorsTextBox.Text = ex.Message;
-                return false;
-            }
-            errorsTextBox.Text = "";
             return true;
         }
 
+        /*
+         * Verifies the validity of the input text.
+         * Since the ciphers shouldn't generate text that is invalid when going through the stack, 
+         * only verifying the validity for the top or the bottom cipher is important.
+         */
+        private bool CheckInputTextValidity(String text, String mode)
+        {
+            if (inputTextBox.Text.Equals(""))
+            {
+                errorsTextBox.Text = "You have not introduced any text in the clear text box!";
+                return false;
+            }
+
+            for (int i = 0; i < usedCiphers.Items.Count; i++)
+            {
+                if (!ciphers[i].CheckInputTextValidity(text, mode))
+                {
+                    errorsTextBox.Text = "The input text is invalid for the top cipher in the stack!";
+                    if (ciphers[0] is PlayfairCipher)
+                        errorsTextBox.Text += " For playfair, the input needs to have an even number of characters";
+                    else
+                        errorsTextBox.Text += " The input needs every character to be a part of the polybius square.";
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        /*
+         * Makes all the inputs be lower case.
+         */
         private void NormalizeInput()
         {
             inputTextBox.Text = inputTextBox.Text.ToLower();
@@ -121,46 +140,47 @@ namespace ClassicCiphers
             }
         }
 
+        /*
+         * Normalizes the input, checks if the cipher stack is instantiated properly, if the input is valid and if the cipher stack is valid.
+         * After that from the top of the stack downwards the input text is encrypted by feeding each cipher the previous' cipher's output.
+         */ 
         private void EncryptText(object sender, RoutedEventArgs e)
         {
-            if (!LoadCiphers() || !VerifyCipherStackValidity())
-                return;
-            NormalizeInput();
             String encryptedText = inputTextBox.Text;
-            try
-            {
-                for (int i = 0; i < usedCiphers.Items.Count; i++)
-                    encryptedText = ciphers[i].Encrypt(encryptedText);
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                errorsTextBox.Text = ex.Message;
+            NormalizeInput();
+            if (!LoadCiphers() ||
+                !CheckInputTextValidity(encryptedText, "encrypt") ||
+                !VerifyCipherStackValidity())
                 return;
-            }
+
+            for (int i = 0; i < usedCiphers.Items.Count; i++)
+                encryptedText = ciphers[i].Encrypt(encryptedText);
+            errorsTextBox.Text = "";
             outputTextBox.Text = encryptedText;
         }
 
+        /*
+         * From the bottom of the stack upwards the input text is decrypted by feeding each cipher the previous' cipher's output.
+         */
         private void DecryptText(object sender, RoutedEventArgs e)
         {
-            if (!LoadCiphers() || !VerifyCipherStackValidity())
-                return;
-            NormalizeInput();
             String decryptedText = inputTextBox.Text;
-            try
-            {
-                for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
-                    decryptedText = ciphers[i].Decrypt(decryptedText);
-            }
-            catch (IndexOutOfRangeException ex)
-            {
-                errorsTextBox.Text = ex.Message;
+            NormalizeInput();
+            if (!LoadCiphers() ||
+                !CheckInputTextValidity(decryptedText, "decrypt") ||
+                !VerifyCipherStackValidity())
                 return;
-            }
 
+            for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
+                decryptedText = ciphers[i].Decrypt(decryptedText);
+            errorsTextBox.Text = "";
 
             outputTextBox.Text = decryptedText;
         }
 
+        /*
+         * Looks at the used cipher stack to see how many text boxes it has to make visible for input keys.
+         */ 
         private void UpdateCipherKeyTextBoxes()
         {
             int i = 0;
@@ -173,8 +193,6 @@ namespace ClassicCiphers
             i = 0;
             foreach (ListBoxItem currentItem in usedCiphers.Items)
             {
-                textBoxes[i].Visibility = Visibility.Visible;
-                buttons[i].Visibility = Visibility.Visible;
                 switch (currentItem.Content)
                 {
                     case "Nihilist":
@@ -190,7 +208,9 @@ namespace ClassicCiphers
                         textBoxes[i].Text = PlayfairCipher.DefaultKeyString;
                         break;
                 }
-                textBoxes[i].Name = currentItem.Content + "Key" + "TextBox";
+
+                textBoxes[i].Visibility = Visibility.Visible;
+                buttons[i].Visibility = Visibility.Visible;
                 i++;
             }
         }
@@ -201,7 +221,7 @@ namespace ClassicCiphers
                 if (listBoxItem.IsSelected)
                 {
                     availableCiphers.Items.Remove(listBoxItem);
-                    usedCiphers.Items.Add(listBoxItem);
+                    usedCiphers.Items.Insert(0,listBoxItem);
 
                     UpdateCipherKeyTextBoxes();
 
@@ -226,7 +246,9 @@ namespace ClassicCiphers
             }
 
         }
-
+        /*
+         * Loads the contents of the file into the text box that correspons to the button clicked.
+         */ 
         private void LoadFileContents(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();

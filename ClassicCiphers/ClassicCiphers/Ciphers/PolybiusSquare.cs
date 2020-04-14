@@ -21,6 +21,10 @@ namespace ClassicCiphers.Ciphers
             Checkerboard = new Dictionary<char, int>();
         }
 
+        /*
+         * Generates an extended version of the polybius square, where first comes the key, then
+         * the alphabet, then special characters and then the numbers
+         */
         public void CreateCheckerboard(String key)
         {
             Key = key;
@@ -48,6 +52,9 @@ namespace ClassicCiphers.Ciphers
             }
         }
 
+        /*
+         * It checks if the character is already in the map, if it isn't it adds it and advances the position in the square 
+         */
         private void AddToCheckerboard(char element, ref int position)
         {
             if (Checkerboard.ContainsKey(element))
@@ -56,6 +63,10 @@ namespace ClassicCiphers.Ciphers
             AdvancePosition(ref position);
 
         }
+
+        /*
+         * Advances the position by one and projects it onto the shape of the polybius square.
+         */
         private void AdvancePosition(ref int position)
         {
             if (position % 10 != 0 && (position % 10) % ColumnCount == 0)

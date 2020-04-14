@@ -7,6 +7,7 @@ namespace ClassicCiphers.Ciphers
         void SetKey(String keyString);
         String Encrypt(String text);
         String Decrypt(String text);
+        bool CheckInputTextValidity(String text, String mode);
 
     }
 }

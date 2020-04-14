@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using ClassicCiphers.Exceptions;
 
 namespace ClassicCiphers.Ciphers
 {
@@ -17,13 +15,16 @@ namespace ClassicCiphers.Ciphers
             MyPolybiusSquare = new PolybiusSquare();
         }
 
+        /*
+         * Checks if the key string contains characters contained by the polybius square.
+         */
         protected override CipherKey CheckKeyValidity(String key)
         {
             CipherKey cipherKey = new CipherKey();
             for (int i = 0; i < key.Length; i++)
             {
                 if (!MyPolybiusSquare.ContainsCharacter(key[i]))
-                    throw new FormatException("The key introduced for the playfair cipher contains more than the permitted characters!");
+                    throw new InvalidKeyFormatException("The key introduced for the playfair cipher contains more than the permitted characters!");
             }
 
             cipherKey.SetStringValue(key);
@@ -37,47 +38,27 @@ namespace ClassicCiphers.Ciphers
             this.Key = CheckKeyValidity(key);
             MyPolybiusSquare.CreateCheckerboard(key);
         }
-
+        
         public override String Encrypt(String text)
         {
-            StringBuilder sb = new StringBuilder(),
-                sbToReturn = new StringBuilder();
-            if (text.Length % 2 == 1)
-                throw new IndexOutOfRangeException("The input text provided for encryption with playfair has an uneven number of characters!");
-            for (int i = 0; i < text.Length; i++)
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < text.Length; i += 2)
             {
-                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
-                    continue;
-                sb.Append(text[i]);
-            }
-            for (int i = 0; i < sb.Length; i += 2)
-            {
-                sbToReturn.Append(EncryptCharacterPair(sb[i], sb[i + 1]));
+                sb.Append(EncryptCharacterPair(text[i], text[i + 1]));
             }
 
-            return sbToReturn.ToString();
+            return sb.ToString();
         }
         public override String Decrypt(String text)
         {
-            StringBuilder sb = new StringBuilder(),
-                sbToReturn = new StringBuilder();
-            if (text.Length % 2 == 1)
-                throw new IndexOutOfRangeException("The input text provided for decryption with playfair has an uneven number of characters!");
-            for (int i = 0; i < text.Length; i++)
+            StringBuilder sb = new StringBuilder();
+
+            for (int i = 0; i < text.Length; i += 2)
             {
-                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
-                    continue;
-                sb.Append(text[i]);
+                sb.Append(DecryptCharacterPair(text[i], text[i + 1]));
             }
 
-            for (int i = 0; i < sb.Length; i += 2)
-            {
-                char x = sb[i];
-                char y = sb[i + 1];
-                sbToReturn.Append(DecryptCharacterPair(x,y));
-            }
-
-            return sbToReturn.ToString();
+            return sb.ToString();
         }
 
         private StringBuilder EncryptCharacterPair(char x, char y)
@@ -89,6 +70,10 @@ namespace ClassicCiphers.Ciphers
             return TransformCharacterPair(x, y, -1);
         }
 
+        /*
+         * Transforms a pair of characters based on the rules of the playfair cipher. 
+         * The direction argument represents wether the pair is being encrypted or decrypted.
+         */ 
         private StringBuilder TransformCharacterPair(char x, char y, int direction)
         {
 
@@ -122,7 +107,19 @@ namespace ClassicCiphers.Ciphers
 
             return sb;
         }
-
+        /*
+         * In order for playfair to play nice with other ciphers, the number of characters of any text provided needs to be even.
+         * If the text contains a character not contained by the polybius square, the text is invalid.
+         */
+        public override bool CheckInputTextValidity(String text, String mode)
+        {
+            if (text.Length % 2 == 1)
+                return false;
+            for (int i = 0; i < text.Length; i++)
+                if (!MyPolybiusSquare.ContainsCharacter(text[i]))
+                    return false;
+            return true;
+        }
         private int WrapLineValue(int x, int direction)
         {
             if (x > PolybiusSquare.LineCount)
