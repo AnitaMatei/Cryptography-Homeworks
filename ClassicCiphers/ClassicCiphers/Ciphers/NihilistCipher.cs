@@ -28,7 +28,7 @@ namespace ClassicCiphers.Ciphers
             String polybiusSquareKey, encryptionKey;
             String[] temp = key.Split('~');
             if (temp.Length != 2)
-                throw new InvalidKeyFormatException("The key introduced for the nihilist cipher doesn't respect the input format!");
+                throw new InvalidKeyFormatException("The key introduced for the nihilist cipher doesn't respect the input format: {polybius square key}~{encryption key}");
             polybiusSquareKey = temp[0];
             encryptionKey = temp[1];
 
