@@ -41,6 +41,9 @@
         <Button x:Name ="textBox1Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,283,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
         <Button x:Name ="textBox2Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,312,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
         <Button x:Name ="textBox3Button" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,340,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileContents"/>
-        
+        <TextBox x:Name ="textBoxFileOutput"  HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="137" Margin="616,212,0,0"/>
+        <Button x:Name ="textBoxFileOutputButton" Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="758,214,0,0" RenderTransformOrigin="0.69,0.851" Click="LoadFileString"/>
+        <CheckBox x:Name="checkBoxFileOutput" Content="Output to file" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="501,214,0,0"/>
+
     </Grid>
 </Window>

@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using ClassicCiphers.Ciphers;
 using System.IO;
 using ClassicCiphers.Exceptions;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace ClassicCiphers
 {
@@ -141,9 +142,32 @@ namespace ClassicCiphers
         }
 
         /*
+         * Sends the output text to either the textbox or the file if the radio button is checked.
+         */
+        private void outputText(String outputText, String mode)
+        {
+            if ((this.FindName("checkBoxFileOutput") as CheckBox).IsChecked == false)
+            {
+                outputTextBox.Text = outputText;
+                return;
+            }
+
+            try
+            {
+                String fileName = "output_" + mode + "_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
+                String filePath = (this.FindName("textBoxFileOutput") as TextBox).Text + "\\" + fileName;
+                File.WriteAllText(filePath, outputText);
+            }
+            catch (NotSupportedException e)
+            {
+                errorsTextBox.Text = e.ToString();
+            }
+        }
+
+        /*
          * Normalizes the input, checks if the cipher stack is instantiated properly, if the input is valid and if the cipher stack is valid.
          * After that from the top of the stack downwards the input text is encrypted by feeding each cipher the previous' cipher's output.
-         */ 
+         */
         private void EncryptText(object sender, RoutedEventArgs e)
         {
             String encryptedText = inputTextBox.Text;
@@ -156,7 +180,7 @@ namespace ClassicCiphers
             for (int i = 0; i < usedCiphers.Items.Count; i++)
                 encryptedText = ciphers[i].Encrypt(encryptedText);
             errorsTextBox.Text = "";
-            outputTextBox.Text = encryptedText;
+            outputText(encryptedText, "encrypt");
         }
 
         /*
@@ -174,13 +198,12 @@ namespace ClassicCiphers
             for (int i = usedCiphers.Items.Count - 1; i >= 0; i--)
                 decryptedText = ciphers[i].Decrypt(decryptedText);
             errorsTextBox.Text = "";
-
-            outputTextBox.Text = decryptedText;
+            outputText(decryptedText, "decrypt");
         }
 
         /*
          * Looks at the used cipher stack to see how many text boxes it has to make visible for input keys.
-         */ 
+         */
         private void UpdateCipherKeyTextBoxes()
         {
             int i = 0;
@@ -221,7 +244,7 @@ namespace ClassicCiphers
                 if (listBoxItem.IsSelected)
                 {
                     availableCiphers.Items.Remove(listBoxItem);
-                    usedCiphers.Items.Insert(0,listBoxItem);
+                    usedCiphers.Items.Insert(0, listBoxItem);
 
                     UpdateCipherKeyTextBoxes();
 
@@ -248,7 +271,7 @@ namespace ClassicCiphers
         }
         /*
          * Loads the contents of the file into the text box that correspons to the button clicked.
-         */ 
+         */
         private void LoadFileContents(object sender, RoutedEventArgs e)
         {
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
@@ -261,5 +284,23 @@ namespace ClassicCiphers
                 (this.FindName(buttonNamePrefix) as TextBox).Text = File.ReadAllText(openFileDialog.FileName);
             }
         }
+
+        /*
+         * Opens a file dialog and if a folder is selected, then the string to it is put in the textbox adjacent to it.
+         */
+        private void LoadFileString(object sender, RoutedEventArgs e)
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+
+
+            CommonFileDialogResult result = dialog.ShowDialog();
+            if (result == CommonFileDialogResult.Ok)
+            {
+                (this.FindName("textBoxFileOutput") as TextBox).Text = dialog.FileName;
+            }
+
+        }
+
     }
 }
