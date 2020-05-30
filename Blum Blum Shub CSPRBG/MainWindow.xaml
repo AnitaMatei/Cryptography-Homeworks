@@ -7,13 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <TextBox x:Name="textBoxFileSize" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="106" Margin="261,67,0,0"/>
-        <Label Content="Size of generated file (MB):" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,36,0,0"/>
-        <CheckBox Content="Use default parameters" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,122,0,0" IsChecked="True"/>
-        <TextBox x:Name="textBoxQInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="261,170,0,0" IsEnabled="False"/>
-        <TextBox x:Name="textBoxPInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="261,142,0,0" IsEnabled="False"/>
-        <Label Content="q:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="237,166,0,0"/>
-        <Label Content="p:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="237,139,0,0"/>
+        <TextBox x:Name="textBoxFileSize" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,41,0,0"/>
+        <Label Content="Size of generated file (MB):" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="27,8,0,0"/>
+        <CheckBox x:Name="checkBoxParameters" Content="Use default parameters" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,161,0,0" IsChecked="True" Click="checkBoxParameters_Click"/>
+        <TextBox x:Name="textBoxQInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,209,0,0" IsEnabled="False"/>
+        <TextBox x:Name="textBoxPInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,181,0,0" IsEnabled="False"/>
+        <Label Content="q:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,205,0,0"/>
+        <Label Content="p:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,178,0,0"/>
+        <Button Content="Generate" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="64,251,0,0" Click="Button_Click"/>
+        <TextBox x:Name="textBoxErrors" HorizontalAlignment="Left" Height="201" TextWrapping="Wrap" VerticalAlignment="Top" Width="185" RenderTransformOrigin="0.508,0.87" Margin="393,41,0,0"/>
+        <Label Content="Errors:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="393,10,0,0"/>
+        <TextBox x:Name="textBoxFolderInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,98,0,0"/>
+        <Button Content="Browse" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Margin="167,101,0,0" Click="SelectFolder"/>
 
     </Grid>
 </Window>
