@@ -1,0 +1,19 @@
+﻿<Window x:Class="Blum_Blum_Shub_CSPRBG.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Blum_Blum_Shub_CSPRBG"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TextBox x:Name="textBoxFileSize" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="106" Margin="261,67,0,0"/>
+        <Label Content="Size of generated file (MB):" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,36,0,0"/>
+        <CheckBox Content="Use default parameters" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="261,122,0,0" IsChecked="True"/>
+        <TextBox x:Name="textBoxQInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="261,170,0,0" IsEnabled="False"/>
+        <TextBox x:Name="textBoxPInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="261,142,0,0" IsEnabled="False"/>
+        <Label Content="q:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="237,166,0,0"/>
+        <Label Content="p:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="237,139,0,0"/>
+
+    </Grid>
+</Window>
