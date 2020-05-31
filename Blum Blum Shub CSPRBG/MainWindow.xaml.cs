@@ -27,8 +27,8 @@ namespace Blum_Blum_Shub_CSPRBG
         public MainWindow()
         {
             InitializeComponent();
-            textBoxPInput.Text = "11";
-            textBoxQInput.Text = "23";
+            textBoxPInput.Text = "10007";
+            textBoxQInput.Text = "10039";
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -74,7 +74,6 @@ namespace Blum_Blum_Shub_CSPRBG
             Byte[] randomByteArray = BBSGenerator.GetRandomByteArray((long)(size * 1000000));
             binaryWriter.Write(randomByteArray);
             binaryWriter.Close();
-            //textBoxErrors.Text = randomByteArray;
         }
         
         private void checkBoxParameters_Click(object sender, RoutedEventArgs e)

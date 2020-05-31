@@ -62,7 +62,7 @@ namespace Blum_Blum_Shub_CSPRBG
 
         private static void GenerateSeed()
         {
-            previousNumber = GenerateRandomBigInteger(m.ToByteArray().Length);
+            previousNumber = GenerateRandomBigInteger(m.ToByteArray().Length - 1);
         }
 
         private static Byte GetRandomBit()
