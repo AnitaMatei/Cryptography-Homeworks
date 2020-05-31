@@ -36,7 +36,7 @@ namespace Blum_Blum_Shub_CSPRBG
             BigInteger p, q;
             double size;
 
-            String fileName = "output_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
+            String fileName = "output_random_" + DateTime.Now.ToString("yyyy-dd-M--HH-mm-ss") + ".txt";
             String filePath = textBoxFolderInput.Text + "\\" + fileName;
             BinaryWriter binaryWriter;
 
@@ -60,12 +60,21 @@ namespace Blum_Blum_Shub_CSPRBG
                 throw;
             }
 
+            if (checkBoxParameters.IsChecked == false)
+            {
+                if (!BBSGenerator.SetParameters(p, q))
+                {
+                    textBoxErrors.Text = "Invalid parameters. (are they blum primes?)";
+                    return;
+                }
+            }
+        
+
             textBoxErrors.Text = "";
-            BBSGenerator.SetParameters(p, q);
-            String randomBitString = BBSGenerator.GetRandomBitString((long)(size * 1000000));
-            binaryWriter.Write(randomBitString);
+            Byte[] randomByteArray = BBSGenerator.GetRandomByteArray((long)(size * 1000000));
+            binaryWriter.Write(randomByteArray);
             binaryWriter.Close();
-            textBoxErrors.Text = randomBitString.Length.ToString();
+            //textBoxErrors.Text = randomByteArray;
         }
         
         private void checkBoxParameters_Click(object sender, RoutedEventArgs e)

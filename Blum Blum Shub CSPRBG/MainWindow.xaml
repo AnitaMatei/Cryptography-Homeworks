@@ -9,7 +9,7 @@
     <Grid>
         <TextBox x:Name="textBoxFileSize" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,41,0,0"/>
         <Label Content="Size of generated file (MB):" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="27,8,0,0"/>
-        <CheckBox x:Name="checkBoxParameters" Content="Use default parameters" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,161,0,0" IsChecked="True" Click="checkBoxParameters_Click"/>
+        <CheckBox x:Name="checkBoxParameters" Content="Use random parameters" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="42,161,0,0" IsChecked="True" Click="checkBoxParameters_Click"/>
         <TextBox x:Name="textBoxQInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,209,0,0" IsEnabled="False"/>
         <TextBox x:Name="textBoxPInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Margin="42,181,0,0" IsEnabled="False"/>
         <Label Content="q:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="18,205,0,0"/>
